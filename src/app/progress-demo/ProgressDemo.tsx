@@ -22,7 +22,6 @@ export default function ProgressDemo() {
 
   const today = todayISO();
 
-  // Draft (today’s input)
   const [draftSymptoms, setDraftSymptoms] = useState<Symptoms>({
     energy: 3,
     mood: 3,
@@ -37,14 +36,12 @@ export default function ProgressDemo() {
     followedRoutines: true,
   });
 
-  // Load persisted or seeded state
   useEffect(() => {
     const state = loadDemoState();
     setCheckins(state.checkins);
     setHydrated(true);
   }, []);
 
-  // Persist
   useEffect(() => {
     if (!hydrated) return;
     saveDemoState({ checkins });
@@ -112,12 +109,11 @@ export default function ProgressDemo() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
-      {/* Minimal context (not a header/nav) */}
+    <div className="mx-auto max-w-2xl px-4 py-8 text-[var(--mos-text)]">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <div className="text-sm text-neutral-500">Demo Mode</div>
-          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
+          <div className="text-sm text-[var(--mos-muted)]">Demo Mode</div>
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--mos-text)]">
             Mos Health Progress Score
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -130,13 +126,12 @@ export default function ProgressDemo() {
         <button
           type="button"
           onClick={reset}
-          className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+          className="rounded-xl border border-[var(--mos-border)] bg-transparent px-3 py-2 text-sm font-medium text-[var(--mos-text)] hover:bg-[var(--mos-bg)]"
         >
           Reset demo
         </button>
       </div>
 
-      {/* In-flow view switching (still minimal) */}
       <div className="mb-6 grid grid-cols-3 gap-2">
         {(
           [
@@ -154,8 +149,8 @@ export default function ProgressDemo() {
               className={[
                 "rounded-xl px-3 py-2 text-sm font-medium transition",
                 active
-                  ? "bg-neutral-900 text-white"
-                  : "border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
+                  ? "bg-[var(--mos-accent)] text-[var(--mos-text)]"
+                  : "border border-[var(--mos-border)] bg-transparent text-[var(--mos-text)] hover:bg-[var(--mos-bg)]",
               ].join(" ")}
             >
               {label}
@@ -230,14 +225,14 @@ export default function ProgressDemo() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-bg)] p-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="text-sm text-neutral-500">Preview</div>
-                <div className="text-lg font-semibold text-neutral-900">
+                <div className="text-sm text-[var(--mos-muted)]">Preview</div>
+                <div className="text-lg font-semibold text-[var(--mos-text)]">
                   Today’s score: {previewScore}/100
                 </div>
-                <div className="mt-1 text-sm text-neutral-600">
+                <div className="mt-1 text-sm text-[var(--mos-muted)]">
                   Baseline week average: {baselineAvg ? `${baselineAvg}/100` : "—"}
                 </div>
               </div>
@@ -247,15 +242,17 @@ export default function ProgressDemo() {
                 onClick={submitToday}
                 disabled={saving}
                 className={[
-                  "rounded-xl px-4 py-2 text-sm font-semibold text-white",
-                  saving ? "bg-neutral-400" : "bg-neutral-900 hover:bg-neutral-800",
+                  "rounded-xl px-4 py-2 text-sm font-semibold transition",
+                  saving
+                    ? "bg-[var(--mos-muted)] text-[var(--mos-bg)]"
+                    : "bg-[var(--mos-accent)] text-[var(--mos-text)] hover:opacity-90",
                 ].join(" ")}
               >
                 {saving ? "Saving..." : "Save check-in"}
               </button>
             </div>
 
-            <div className="mt-4 text-xs text-neutral-500">
+            <div className="mt-4 text-xs text-[var(--mos-muted)]">
               Deterministic scoring + rolling averages. State persists in your browser.
             </div>
           </div>
@@ -270,16 +267,19 @@ export default function ProgressDemo() {
           />
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5">
-              <div className="text-sm text-neutral-500">Progress Score (rolling 7-day)</div>
-              <div className="mt-2 text-4xl font-semibold tracking-tight text-neutral-900">
+            <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-bg)] p-5">
+              <div className="text-sm text-[var(--mos-muted)]">Progress Score (rolling 7-day)</div>
+              <div className="mt-2 text-4xl font-semibold tracking-tight text-[var(--mos-text)]">
                 {rolling7}/100
               </div>
-              <div className="mt-2 text-sm text-neutral-600">
+              <div className="mt-2 text-sm text-[var(--mos-muted)]">
                 {baselineAvg ? (
                   <>
-                    {improvementPct >= 0 ? "+" : ""}
-                    {improvementPct}% vs baseline ({baselineAvg}/100)
+                    <span className="text-[var(--mos-accent)] font-semibold">
+                      {improvementPct >= 0 ? "+" : ""}
+                      {improvementPct}%
+                    </span>{" "}
+                    vs baseline ({baselineAvg}/100)
                   </>
                 ) : (
                   "Baseline not ready yet (needs up to 7 days)."
@@ -289,18 +289,18 @@ export default function ProgressDemo() {
               <button
                 type="button"
                 onClick={() => setView("checkin")}
-                className="mt-4 w-full rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800"
+                className="mt-4 w-full rounded-xl bg-[var(--mos-accent)] px-4 py-2 text-sm font-semibold text-[var(--mos-text)] hover:opacity-90"
               >
                 {hasToday ? "Adjust today’s check-in" : "Do today’s check-in"}
               </button>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5">
-              <div className="text-sm text-neutral-500">Status</div>
-              <div className="mt-2 text-lg font-semibold text-neutral-900">
+            <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-bg)] p-5">
+              <div className="text-sm text-[var(--mos-muted)]">Status</div>
+              <div className="mt-2 text-lg font-semibold text-[var(--mos-text)]">
                 {hasToday ? "Check-in saved" : "No check-in yet"}
               </div>
-              <div className="mt-2 text-sm text-neutral-600">
+              <div className="mt-2 text-sm text-[var(--mos-muted)]">
                 {hasToday
                   ? "Nice. Your dashboard updates immediately."
                   : "Submit today’s check-in to see the score move."}
@@ -309,7 +309,7 @@ export default function ProgressDemo() {
               <button
                 type="button"
                 onClick={() => setView("history")}
-                className="mt-4 w-full rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50"
+                className="mt-4 w-full rounded-xl border border-[var(--mos-border)] bg-transparent px-4 py-2 text-sm font-semibold text-[var(--mos-text)] hover:bg-[var(--mos-bg)]"
               >
                 View history
               </button>
@@ -317,12 +317,10 @@ export default function ProgressDemo() {
           </div>
 
           <div>
-            <div className="mb-2 flex items-end justify-between">
-              <div>
-                <div className="text-sm font-medium text-neutral-900">Trend (last 14 days)</div>
-                <div className="text-xs text-neutral-500">
-                  Baseline is computed from the first 7 days of history.
-                </div>
+            <div className="mb-2">
+              <div className="text-sm font-medium text-[var(--mos-text)]">Trend (last 14 days)</div>
+              <div className="text-xs text-[var(--mos-muted)]">
+                Baseline is computed from the first 7 days of history.
               </div>
             </div>
 
@@ -338,12 +336,12 @@ export default function ProgressDemo() {
             subtitle="Each day has inputs and an output score — easy to trust and explain."
           />
 
-          <div className="rounded-2xl border border-neutral-200 bg-white">
-            <div className="border-b border-neutral-200 px-4 py-3 text-sm font-medium text-neutral-900">
+          <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-bg)]">
+            <div className="border-b border-[var(--mos-border)] px-4 py-3 text-sm font-medium text-[var(--mos-text)]">
               Last 14 days
             </div>
 
-            <div className="divide-y divide-neutral-200">
+            <div className="divide-y divide-[var(--mos-border)]">
               {snapshots
                 .slice()
                 .sort((a, b) => (a.dateISO < b.dateISO ? 1 : -1))
@@ -351,16 +349,18 @@ export default function ProgressDemo() {
                 .map((s, idx) => (
                   <div key={s.dateISO} className="flex items-center justify-between px-4 py-3">
                     <div>
-                      <div className="text-sm font-medium text-neutral-900">
+                      <div className="text-sm font-medium text-[var(--mos-text)]">
                         {formatDatePretty(s.dateISO)}
                         {s.dateISO === today ? " (Today)" : ""}
                       </div>
-                      <div className="text-xs text-neutral-500">
+                      <div className="text-xs text-[var(--mos-muted)]">
                         {idx >= 7 ? "Post-baseline" : "Baseline week"}
                       </div>
                     </div>
 
-                    <div className="text-sm font-semibold text-neutral-900">{s.dailyScore}/100</div>
+                    <div className="text-sm font-semibold text-[var(--mos-text)]">
+                      {s.dailyScore}/100
+                    </div>
                   </div>
                 ))}
             </div>
@@ -370,14 +370,14 @@ export default function ProgressDemo() {
             <button
               type="button"
               onClick={() => setView("dashboard")}
-              className="flex-1 rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50"
+              className="flex-1 rounded-xl border border-[var(--mos-border)] bg-transparent px-4 py-2 text-sm font-semibold text-[var(--mos-text)] hover:bg-[var(--mos-bg)]"
             >
               Back to dashboard
             </button>
             <button
               type="button"
               onClick={() => setView("checkin")}
-              className="flex-1 rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800"
+              className="flex-1 rounded-xl bg-[var(--mos-accent)] px-4 py-2 text-sm font-semibold text-[var(--mos-text)] hover:opacity-90"
             >
               Today’s check-in
             </button>
@@ -385,7 +385,7 @@ export default function ProgressDemo() {
         </div>
       ) : null}
 
-      <div className="mt-10 text-xs text-neutral-500">
+      <div className="mt-10 text-xs text-[var(--mos-muted)]">
         Frontend-only demo. Data persists in your browser to mimic a real product.
       </div>
     </div>

@@ -12,9 +12,11 @@ export function SectionTitle({
 }) {
   return (
     <div className="mb-4">
-      <div className="text-lg font-semibold text-neutral-900">{title}</div>
+      <div className="text-lg font-semibold text-[var(--mos-text)]">
+        {title}
+      </div>
       {subtitle ? (
-        <div className="mt-1 text-sm text-neutral-600">{subtitle}</div>
+        <div className="mt-1 text-sm text-[var(--mos-muted)]">{subtitle}</div>
       ) : null}
     </div>
   );
@@ -22,7 +24,7 @@ export function SectionTitle({
 
 export function Pill({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-medium text-neutral-700">
+    <span className="inline-flex items-center rounded-full border border-[var(--mos-border)] bg-[var(--mos-bg)] px-3 py-1 text-xs font-medium text-[var(--mos-text)]">
       {children}
     </span>
   );
@@ -38,14 +40,16 @@ export function SliderRow({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4">
+    <div className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-bg)] p-4">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-neutral-900">{label}</div>
-        <div className="text-sm text-neutral-600">{value}/5</div>
+        <div className="text-sm font-medium text-[var(--mos-text)]">
+          {label}
+        </div>
+        <div className="text-sm text-[var(--mos-muted)]">{value}/5</div>
       </div>
 
       <input
-        className="mt-3 w-full accent-neutral-900"
+        className="mt-3 w-full accent-[var(--mos-accent)]"
         type="range"
         min={1}
         max={5}
@@ -54,7 +58,7 @@ export function SliderRow({
         onChange={(e) => onChange(Number(e.target.value))}
       />
 
-      <div className="mt-2 flex justify-between text-xs text-neutral-500">
+      <div className="mt-2 flex justify-between text-xs text-[var(--mos-muted)]">
         <span>Low</span>
         <span>High</span>
       </div>
@@ -75,20 +79,20 @@ export function ToggleRow({
     <button
       type="button"
       onClick={onToggle}
-      className="flex w-full items-center justify-between rounded-xl border border-neutral-200 bg-white px-4 py-3 text-left transition hover:bg-neutral-50"
+      className="flex w-full items-center justify-between rounded-xl border border-[var(--mos-border)] bg-[var(--mos-bg)] px-4 py-3 text-left transition hover:opacity-95"
     >
-      <div className="text-sm font-medium text-neutral-900">{label}</div>
+      <div className="text-sm font-medium text-[var(--mos-text)]">{label}</div>
 
       <div
         className={[
           "h-6 w-11 rounded-full p-1 transition",
-          checked ? "bg-neutral-900" : "bg-neutral-300",
+          checked ? "bg-[var(--mos-accent)]" : "bg-[var(--mos-muted)]",
         ].join(" ")}
         aria-hidden="true"
       >
         <div
           className={[
-            "h-4 w-4 rounded-full bg-white transition",
+            "h-4 w-4 rounded-full bg-[var(--mos-bg)] transition",
             checked ? "translate-x-5" : "translate-x-0",
           ].join(" ")}
         />
@@ -98,7 +102,6 @@ export function ToggleRow({
 }
 
 export function Sparkline({ values }: { values: number[] }) {
-  // Tiny no-deps chart
   const w = 240;
   const h = 56;
   const pad = 6;
@@ -117,14 +120,13 @@ export function Sparkline({ values }: { values: number[] }) {
   const points = values.map((v, i) => `${scaleX(i)},${scaleY(v)}`).join(" ");
 
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-3">
-      <svg width="100%" viewBox={`0 0 ${w} 0 ${h}`} className="hidden" />
+    <div className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-bg)] p-3">
       <svg width="100%" viewBox={`0 0 ${w} ${h}`} className="block">
         <polyline
           fill="none"
           stroke="currentColor"
           strokeWidth="2.5"
-          className="text-neutral-900"
+          className="text-[var(--mos-text)]"
           points={points}
         />
         <line
@@ -132,13 +134,13 @@ export function Sparkline({ values }: { values: number[] }) {
           y1={scaleY(50)}
           x2={w - pad}
           y2={scaleY(50)}
-          stroke="currentColor"
+          stroke="var(--mos-muted)"
           strokeWidth="1"
-          opacity="0.15"
+          opacity="0.25"
         />
       </svg>
 
-      <div className="mt-2 flex items-center justify-between text-xs text-neutral-500">
+      <div className="mt-2 flex items-center justify-between text-xs text-[var(--mos-muted)]">
         <span>Low</span>
         <span>High</span>
       </div>
